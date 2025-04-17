@@ -5,18 +5,27 @@ import { MessagesContext, Message } from "@/context/MessagesContext"
 import Colors from "@/data/Colors"
 import Lookup from "@/data/Lookup"
 import { ArrowRight, Link } from "lucide-react"
+import { UserDetailContext } from "@/context/UserDetailContext"
+import SignInDialog from "./SignInDialog"
 
 export default function Hero() {
-    const [userInput, setUserInput] = useState<string>("")
+    const [userInput, setUserInput] = useState("")
     const { messages, setMessages } = useContext(MessagesContext)
+    const {userDetail,setUserDetail} = useContext(UserDetailContext)
+    const [openDialogue,setOpenDialogue] = useState(false)
 
     const onGenerate = (input: string) => {
+        if(!userDetail?.name){
+            setOpenDialogue(true)
+            return;
+        }
+
         const newMessage: Message = {
             role: "user",
             content: input,
         }
 
-        setMessages((prevMessages) => [...prevMessages, newMessage])
+        setMessages([newMessage])
         setUserInput("")
     }
 
@@ -59,6 +68,7 @@ export default function Hero() {
                     </h2>
                 ))}
             </div>
+            <SignInDialog openDialog={openDialogue} closeDialog={(v : any)=>setOpenDialogue(v)} />
         </div>
     )
 }
