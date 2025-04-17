@@ -4,6 +4,7 @@ export interface UserDetail {
     _id?: GenericId<"users">
     name?: string
     email?: string
+    picture?: string
 }
 
 interface UserDetailContextType {

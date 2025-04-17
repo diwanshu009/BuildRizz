@@ -4,7 +4,7 @@ export default {
     SUGGSTIONS: ['Create ToDo App in React', 'Create Budget Track App', 'Create Gym Managment Portal Dashboard', 'Create Quizz App On History', 'Create Login Signup Screen'],
     HERO_HEADING: 'What do you want to rizz?',
     HERO_DESC: 'Prompt, run, edit, and deploy full-stack web apps.',
-    INPUT_PLACEHOLDER: 'What you want to build?',
+    INPUT_PLACEHOLDER: 'What you want to Rizz?',
     SIGNIN_HEADING: 'Continue With BuildRizz',
     SIGNIN_SUBHEADING: 'To use BuildRizz you must log into an existing account or create one.',
     SIGNIn_AGREEMENT_TEXT: 'By using BuildRizz, you agree to the collection of usage data for analytics.',
