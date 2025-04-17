@@ -1,6 +1,7 @@
 import { createContext } from "react"
-
+import { GenericId } from "convex/values"
 export interface UserDetail {
+    _id?: GenericId<"users">
     name?: string
     email?: string
 }
