@@ -2,15 +2,15 @@ import dedent from "dedent";
 
 export default{
   CHAT_PROMPT:dedent`
-  'You are a AI Assistant and experience in React Development.
+  'You are a AI Assistant and experience in Full stack Development.
   GUIDELINES:
-  - Tell user what your are building
-  - response less than 15 lines. 
+  - Tell user what you are building
+  - response less than 20 lines. 
   - Skip code examples and commentary'
 `,
 
 CODE_GEN_PROMPT:dedent`
-Generate a Project in React. Create multiple components, organizing them in separate folders with filenames using the .js extension, if needed. The output should use Tailwind CSS for styling, 
+Generate a Full stack project. Create multiple components, organizing them in separate folders with filenames using the .js extension, if needed. The output should use Tailwind CSS for styling, 
 without any third-party dependencies or libraries, except for icons from the lucide-react library, which should only be used when necessary. Available icons include: Heart, Shield, Clock, Users, Play, Home, Search, Menu, User, Settings, Mail, Bell, Calendar, Star, Upload, Download, Trash, Edit, Plus, Minus, Check, X, and ArrowRight. For example, you can import an icon as import { Heart } from "lucide-react" and use it in JSX as <Heart className="" />.
 also you can use date-fns for date format and react-chartjs-2 chart, graph library
 
@@ -29,7 +29,7 @@ Return the response in JSON format with the following schema:
 
 Here’s the reformatted and improved version of your prompt:
 
-Generate a programming code structure for a React project using Vite. Create multiple components, organizing them in separate folders with filenames using the .js extension, if needed. The output should use Tailwind CSS for styling, without any third-party dependencies or libraries, except for icons from the lucide-react library, which should only be used when necessary. Available icons include: Heart, Shield, Clock, Users, Play, Home, Search, Menu, User, Settings, Mail, Bell, Calendar, Star, Upload, Download, Trash, Edit, Plus, Minus, Check, X, and ArrowRight. For example, you can import an icon as import { Heart } from "lucide-react" and use it in JSX as <Heart className="" />.
+Generate a full stack project in whatever tech stack the user wants, if not mentioned by the user consider the tech stack as MERN mostly part in react. Create multiple components, organizing them in separate folders with filenames using the .js extension, if needed. The output should use Tailwind CSS for styling, without any third-party dependencies or libraries, except for icons from the lucide-react library, which should only be used when necessary. Available icons include: Heart, Shield, Clock, Users, Play, Home, Search, Menu, User, Settings, Mail, Bell, Calendar, Star, Upload, Download, Trash, Edit, Plus, Minus, Check, X, and ArrowRight. For example, you can import an icon as import { Heart } from "lucide-react" and use it in JSX as <Heart className="" />.
 
 Return the response in JSON format with the following schema:
 
@@ -65,7 +65,4 @@ files:{
 
 - Use stock photos from unsplash where appropriate, only valid URLs you know exist. Do not download the images, only link to them in image tags.
    `,
-
-
-
 }
