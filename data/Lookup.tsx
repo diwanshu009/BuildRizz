@@ -14,42 +14,41 @@ export default {
         '/public/index.html': {
             code: `<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+    </body>
 </html>`
         },
         '/App.css': {
-            code: `
-            @tailwind base;
+            code: `@tailwind base;
 @tailwind components;
 @tailwind utilities;`
         },
         '/tailwind.config.js': {
-            code: `
-            /** @type {import('tailwindcss').Config} */
+            code: `/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+    content: [
+        "./src/**/*.{js,jsx,ts,tsx}",
+    ],
+    theme: {
+        extend: {},
+    },
+    plugins: [],
 }`
         },
         '/postcss.config.js': {
             code: `/** @type {import('postcss-load-config').Config} */
 const config = {
-  plugins: {
-    tailwindcss: {},
-  },
+    plugins: {
+        tailwindcss: {},
+        autoprefixer: {},
+    },
 };
 
 export default config;
@@ -57,20 +56,19 @@ export default config;
         }
     },
     DEPENDANCY: {
-
-        "postcss": "^8",
-        "tailwindcss": "^3.4.1",
-        autoprefixer: "^10.0.0",
+        "postcss": "^8.5.3",
+        "tailwindcss": "^4.0.14",
+        "autoprefixer": "^10.4.21",
         "uuid4": "^2.0.3",
-        "tailwind-merge": "^2.4.0",
+        "tailwind-merge": "^3.0.2",
         "tailwindcss-animate": "^1.0.7",
-        "lucide-react": "^0.469.0",
-        "react-router-dom": "^7.1.1",
+        "lucide-react": "^0.482.0",
+        "react-router-dom": "^7.4.0",
         "firebase": "^11.1.0",
-        "@google/generative-ai": "^0.21.0",
+        "@google/generative-ai": "^0.23.0",
         "date-fns": "^4.1.0",
         "react-chartjs-2": "^5.3.0",
-        "chart.js": "^4.4.7",
+        "chart.js": "^4.4.7"
     },
     PRICING_DESC: 'Start with a free account to speed up your workflow on public projects or boost your entire team with instantly-opening production environments.',
     PRICING_OPTIONS: [
