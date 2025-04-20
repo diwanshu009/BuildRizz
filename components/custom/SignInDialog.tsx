@@ -46,7 +46,7 @@ export default function SignInDialog({ openDialog, closeDialog }: SignInDialogPr
                 await CreateUser(newUser)
 
                 if (typeof window !== "undefined") {
-                    localStorage.setItem("user", JSON.stringify(user))
+                    localStorage.setItem("user", JSON.stringify(newUser))
                 }
 
                 setUserDetail(newUser)

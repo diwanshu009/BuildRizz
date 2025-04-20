@@ -51,7 +51,7 @@ export default function Header() {
                 await CreateUser(newUser)
 
                 if (typeof window !== "undefined") {
-                    localStorage.setItem("user", JSON.stringify(user))
+                    localStorage.setItem("user", JSON.stringify(newUser))
                 }
 
                 setUserDetail(newUser)
