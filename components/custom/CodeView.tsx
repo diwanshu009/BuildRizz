@@ -79,6 +79,7 @@ export default function CodeView() {
         } catch (error) {
             console.error("AI Code Generation failed", error)
         } finally {
+            setActiveTab('code')
             setLoading(false)
         }
     }

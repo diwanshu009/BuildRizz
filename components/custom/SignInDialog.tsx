@@ -21,13 +21,13 @@ interface SignInDialogProps {
 }
 
 export default function SignInDialog({ openDialog, closeDialog }: SignInDialogProps) {
-    const { userDetail, setUserDetail } = useContext(UserDetailContext)
+    const { setUserDetail } = useContext(UserDetailContext)
     const CreateUser = useMutation(api.users.CreateUser)
 
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
-                const userInfo = await axios.get(
+                const {data: user} = await axios.get(
                     "https://www.googleapis.com/oauth2/v3/userinfo",
                     {
                         headers: {
@@ -36,20 +36,20 @@ export default function SignInDialog({ openDialog, closeDialog }: SignInDialogPr
                     }
                 )
 
-                const user = userInfo.data
+                const newUser = {
+                    name: user.name,
+                    email: user.email,
+                    picture: user.picture,
+                    uid: uuid4()
+                }
 
-                await CreateUser({
-                    name: user?.name,
-                    email: user?.email,
-                    picture: user?.picture,
-                    uid: uuid4(),
-                })
+                await CreateUser(newUser)
 
                 if (typeof window !== "undefined") {
                     localStorage.setItem("user", JSON.stringify(user))
                 }
 
-                setUserDetail(user)
+                setUserDetail(newUser)
                 closeDialog(false)
             } catch (error) {
                 console.error("Error during Google login:", error)

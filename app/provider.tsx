@@ -29,16 +29,16 @@ export function Provider({ children }: ProviderProps) {
     }, [])
 
     const isAuthenticated = async () => {
-        if (typeof window !== "undefined") {
-            const user = localStorage.getItem("user")
-            if (!user) {
+        if (typeof window !== 'undefined') {
+            const storedUser = localStorage.getItem("user")
+            if (!storedUser) {
                 router.push("/")
                 return
             }
             try {
-                const parsedUser = JSON.parse(user)
+                const user = JSON.parse(storedUser)
                 const result = await convex.query(api.users.GetUser, {
-                    email: parsedUser?.email,
+                    email: user?.email,
                 })
                 setUserDetail(result)
             } catch (err) {
