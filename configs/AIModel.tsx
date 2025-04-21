@@ -42,7 +42,27 @@ export const GenAiCode = model.startChat({
         {
             role: "model",
             parts: [
-                {text: "```json{\n{\n \"projectTitle\": \ "
+                {text: `{
+  "projectTitle": "To Do App",
+  "components": [
+    {
+      "name": "Header",
+      "description": "The header component for the to-do app"
+    },
+    {
+      "name": "TodoList",
+      "description": "Component that lists all to-dos"
+    },
+    {
+      "name": "TodoItem",
+      "description": "Component for a single to-do item"
+    },
+    {
+      "name": "Footer",
+      "description": "The footer component of the to-do app"
+    }
+  ]
+}`
                 }
             ]
         }

@@ -24,19 +24,33 @@ export default function ChatView() {
     const [userInput, setUserInput] = useState("")
     const [loading, setLoading] = useState(false)
     const UpdateMessages = useMutation(api.workspace.UpdateMessages)
-    const {toggleSidebar} = useSidebar()
+    const { toggleSidebar } = useSidebar()
+    const [hasResponded, setHasResponded] = useState(false)
 
     useEffect(() => {
-        id && GetWorkspaceData()
+        if (id) {
+            GetWorkspaceData()
+        }
     }, [id])
 
     const GetWorkspaceData = async () => {
-        if (!id) return
-        const result = await convex.query(api.workspace.GetWorkspace, {
-            workspaceId: id
-        })
-        if (result?.messages) setMessages(result.messages)
+        try {
+            if (!id) return
+            const result = await convex.query(api.workspace.GetWorkspace, {
+                workspaceId: id
+            })
+            if (result?.messages) setMessages(result.messages)
+        }
+        catch (err) {
+            console.error("Failed to fetch workspace messages:", err)
+        }
     }
+
+    useEffect(() => {
+        if (messages.length && messages[messages.length - 1].role === 'user' && !loading && !hasResponded) {
+            GetAiResponse()
+        }
+    }, [messages, loading, hasResponded])
 
     const GetAiResponse = useCallback(async () => {
         setLoading(true)
@@ -44,27 +58,29 @@ export default function ChatView() {
             const prompt = JSON.stringify(messages) + Prompt.CHAT_PROMPT
             const result = await axios.post('/api/ai-chat', { prompt })
             const aiResp = { role: 'ai', content: result.data.result }
-            const newMessages = [...messages, aiResp]
 
-            setMessages(newMessages)
-            await UpdateMessages({ messages: newMessages, workspaceId: id })
+            setMessages(prevMessages => [...prevMessages, aiResp])
+            await UpdateMessages({ messages: [...messages, aiResp], workspaceId: id })
+            setHasResponded(true)
         } catch (error) {
             console.error("Error fetching AI response:", error)
         } finally {
             setLoading(false)
         }
-    }, [messages, id, UpdateMessages, setMessages])
+    }, [messages, id, UpdateMessages])
 
-    useEffect(() => {
-        if (messages?.length && messages[messages.length - 1]?.role === 'user') {
-            GetAiResponse()
-        }
-    }, [messages, GetAiResponse])
 
     const onGenerate = (input: string) => {
         if (!input.trim()) return
         setMessages(prev => [...prev, { role: 'user', content: input.trim() }])
         setUserInput("")
+    }
+
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault()  
+            onGenerate(userInput)
+        }
     }
 
     return (
@@ -83,8 +99,8 @@ export default function ChatView() {
                                 className="rounded-full"
                             />
                         )}
-                        <div className='flex flex-col'>
-                            <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        <div className='flex flex-col text-white'>
+                            <ReactMarkdown>{String(msg.content)}</ReactMarkdown>
                         </div>
                     </div>
                 ))}
@@ -97,7 +113,7 @@ export default function ChatView() {
             </div>
 
             <div className='border-t p-4 flex items-end gap-3'>
-               {userDetail?.picture && (
+                {userDetail?.picture && (
                     <Image
                         src={userDetail.picture}
                         alt="user"
@@ -116,7 +132,8 @@ export default function ChatView() {
                             placeholder={Lookup.INPUT_PLACEHOLDER}
                             onChange={(event) => setUserInput(event.target.value)}
                             value={userInput}
-                            className="outline-none bg-transparent w-full h-32 max-h-56 resize-none"
+                            onKeyDown={handleKeyDown} 
+                            className="outline-none bg-transparent w-full h-32 max-h-56 resize-none text-white"
                         />
                         {userInput && (
                             <ArrowRight

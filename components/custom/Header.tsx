@@ -71,19 +71,20 @@ export default function Header() {
             <Link href={'/'}>
                 <Image src={'/logo.png'} alt='Logo' width={40} height={40} />
             </Link>
-            {!userDetail?.name ? <div className="flex gap-5">
+            {!userDetail?.name ? (
+                <div className="flex gap-5">
                 <Button variant="ghost" onClick={() => googleLogin()} className="cursor-pointer">Sign In</Button>
                 <Button onClick={() => googleLogin()} className="text-white cursor-pointer" style={{
                     backgroundColor: Colors.BLUE
                 }} >Get Started</Button>
-            </div> :
+            </div> ) :
                 isWorkspacePage ? (
                     <div className="flex gap-2 items-center">
                         <Button variant="ghost" onClick={() => onActionBtn('export')} className="flex items-center justify-center gap-1 cursor-pointer"><LucideDownload className="w-4 h-4" />Export</Button>
 
                         <Button onClick={() => onActionBtn('deploy')} className="flex items-center gap-1 bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"><Rocket className="w-4 h-4" /> Deploy</Button>
 
-                        {userDetail && (
+                        {userDetail?.picture && (
                             <Image
                                 src={userDetail?.picture!}
                                 alt="User"

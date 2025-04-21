@@ -30,8 +30,7 @@ export const GetUser = query({
         email: v.string()
     },
     handler: async(ctx,args)=>{
-        const users = await ctx.db.query('users').filter((q)=>q.eq(q.field('email'),args.email)).collect()
-        const user =  users[0]
+        const user = await ctx.db.query('users').filter((q)=>q.eq(q.field('email'),args.email)).first()
         if(!user) return null
         return {
             _id: user._id,

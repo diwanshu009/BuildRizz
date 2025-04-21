@@ -10,7 +10,6 @@ export default function SideBarFooter() {
     const {setUserDetail} = useContext(UserDetailContext)
 
     const handleLogOut = ()=>{
-        console.log("hello")
         localStorage.removeItem("user")
         setUserDetail(null)
         router.push('/')

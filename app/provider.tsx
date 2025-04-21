@@ -6,11 +6,11 @@ import Header from "@/components/custom/Header"
 import { MessagesContext, Message } from "@/context/MessagesContext"
 import { UserDetail, UserDetailContext } from "@/context/UserDetailContext"
 import { GoogleOAuthProvider } from "@react-oauth/google"
-import { useConvex } from "convex/react"
 import { api } from "@/convex/_generated/api"
+import { useConvex, useQuery } from "convex/react"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import AppSideBar from "@/components/custom/AppSideBar"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { ActionContext, ActionType } from "@/context/ActionContext"
 
 interface ProviderProps {
@@ -21,18 +21,21 @@ export function Provider({ children }: ProviderProps) {
     const [messages, setMessages] = useState<Message[]>([])
     const [userDetail, setUserDetail] = useState<UserDetail | null>(null)
     const [action, setAction] = useState<ActionType>(null)
-    const convex = useConvex()
-    const router = useRouter()
+    const [initialCheckDone, setInitialCheckDone] = useState(false)
 
-    useEffect(() => {
-        isAuthenticated()
-    }, [])
+    const router = useRouter()
+    const pathname = usePathname()
+    const convex = useConvex()
+
 
     const isAuthenticated = async () => {
         if (typeof window !== 'undefined') {
             const storedUser = localStorage.getItem("user")
             if (!storedUser) {
-                router.push("/")
+                setInitialCheckDone(true)
+                if (pathname !== "/") {
+                    router.push("/")
+                }
                 return
             }
             try {
@@ -43,10 +46,15 @@ export function Provider({ children }: ProviderProps) {
                 setUserDetail(result)
             } catch (err) {
                 console.error("Error parsing user or fetching:", err)
-                router.push("/")
+            } finally {
+                setInitialCheckDone(true)
             }
         }
     }
+
+    useEffect(() => {
+        isAuthenticated()
+    }, [pathname, router])
 
     return (
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_AUTH_CLIENT_ID_KEY ?? ""}>
@@ -63,7 +71,7 @@ export function Provider({ children }: ProviderProps) {
                                 {userDetail && <AppSideBar />}
                                 <div className="flex-1 flex flex-col">
                                     <Header />
-                                    <main className="flex-1">{children}</main>
+                                    {initialCheckDone && <main className="flex-1">{children}</main>}
                                 </div>
                             </SidebarProvider>
                         </NextThemesProvider>

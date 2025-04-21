@@ -40,6 +40,8 @@ export default function CodeView() {
                 })
                 const mergedFiles = { ...Lookup.DEFAULT_FILE, ...result?.fileData }
                 setFiles(mergedFiles)
+            } catch (error) {
+                console.error("Failed to fetch files", error);
             } finally {
                 setLoading(false)
             }
@@ -54,10 +56,7 @@ export default function CodeView() {
     }, [action])
 
     useEffect(() => {
-        if (
-            messages?.length > 0 &&
-            messages[messages.length - 1]?.role === "user"
-        ) {
+        if (messages?.length > 0 && messages[messages.length - 1]?.role === "user") {
             generateAiCode()
         }
     }, [messages])
@@ -104,14 +103,14 @@ export default function CodeView() {
                 }}
             >
                 <SandpackLayout>
-                    {activeTab == 'code' ? <>
+                    {activeTab === 'code' ? (<>
                         <SandpackFileExplorer style={{ height: '80vh' }} />
                         <SandpackCodeEditor style={{ height: '80vh' }} />
-                    </> :
+                    </>) : (
                         <>
                             <SandpackPreviewClient />
                         </>
-                    }
+                    )}
                 </SandpackLayout>
             </SandpackProvider>
 

@@ -61,7 +61,7 @@ export default function SignInDialog({ openDialog, closeDialog }: SignInDialogPr
     })
 
     return (
-        <Dialog open={openDialog} onOpenChange={closeDialog}>
+        <Dialog open={openDialog} onOpenChange={(open) => closeDialog(open)}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className="text-center text-xl font-bold text-white">
@@ -79,7 +79,7 @@ export default function SignInDialog({ openDialog, closeDialog }: SignInDialogPr
                                 Sign In With Google
                             </Button>
                             <p className="text-center text-xs text-gray-400">
-                                {Lookup.SIGNIn_AGREEMENT_TEXT}
+                                {Lookup.SIGNIN_AGREEMENT_TEXT}
                             </p>
                         </div>
                     </DialogDescription>
