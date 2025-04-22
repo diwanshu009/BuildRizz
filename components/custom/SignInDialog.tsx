@@ -27,7 +27,7 @@ export default function SignInDialog({ openDialog, closeDialog }: SignInDialogPr
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             try {
-                const {data: user} = await axios.get(
+                const { data: user } = await axios.get(
                     "https://www.googleapis.com/oauth2/v3/userinfo",
                     {
                         headers: {
@@ -68,22 +68,22 @@ export default function SignInDialog({ openDialog, closeDialog }: SignInDialogPr
                         {Lookup.SIGNIN_HEADING}
                     </DialogTitle>
                     <DialogDescription>
-                        <div className="flex flex-col items-center justify-center gap-4 mt-4">
-                            <p className="text-center text-gray-300">
-                                {Lookup.SIGNIN_SUBHEADING}
-                            </p>
-                            <Button
-                                className="bg-blue-500 text-white hover:bg-blue-400"
-                                onClick={() => googleLogin()}
-                            >
-                                Sign In With Google
-                            </Button>
-                            <p className="text-center text-xs text-gray-400">
-                                {Lookup.SIGNIN_AGREEMENT_TEXT}
-                            </p>
-                        </div>
+                        {Lookup.SIGNIN_SUBHEADING}
                     </DialogDescription>
                 </DialogHeader>
+
+                <div className="flex flex-col items-center justify-center gap-4 mt-4">
+                    <Button
+                        className="bg-blue-500 text-white hover:bg-blue-400 cursor-pointer"
+                        onClick={() => googleLogin()}
+                    >
+                        Sign In With Google
+                    </Button>
+                    <p className="text-center text-xs text-gray-400">
+                        {Lookup.SIGNIN_AGREEMENT_TEXT}
+                    </p>
+                </div>
+
             </DialogContent>
         </Dialog>
     )

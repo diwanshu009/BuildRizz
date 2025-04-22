@@ -14,13 +14,13 @@ import { useRouter } from "next/navigation"
 export default function Hero() {
     const [userInput, setUserInput] = useState("")
     const { setMessages } = useContext(MessagesContext)
-    const {userDetail} = useContext(UserDetailContext)
-    const [openDialog,setOpenDialog] = useState(false)
+    const { userDetail } = useContext(UserDetailContext)
+    const [openDialog, setOpenDialog] = useState(false)
     const CreateWorkspace = useMutation(api.workspace.CreateWorkspace)
     const router = useRouter()
 
     const onGenerate = async (input: string) => {
-        if(!userDetail?.name || !userDetail._id){
+        if (!userDetail?.name || !userDetail._id) {
             setOpenDialog(true)
             return;
         }
@@ -30,25 +30,33 @@ export default function Hero() {
             content: input,
         }
 
-        setMessages([newMessage])
-        setUserInput("")
+        try {
+            const workspaceId = await CreateWorkspace({
+                user: userDetail._id,
+                messages: [newMessage],
+            })
 
-        const workspaceId = await CreateWorkspace({
-            user: userDetail._id,
-            messages: [newMessage],
-        })
-
-        router.push(`/workspace/${workspaceId}`)
+            router.push(`/workspace/${workspaceId}`)
+        } catch (err) {
+            console.error("Failed to create workspace", err)
+        } finally {
+            setOpenDialog(false)
+        }
     }
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault()  
-            if (userInput.trim() !== "") { 
+            event.preventDefault()
+            if (userInput.trim() !== "") {
                 onGenerate(userInput)
             }
         }
     }
+
+    const handleSuggestionClick = (suggestion: string) => {
+        onGenerate(suggestion);
+    };
+
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen px-4 text-center gap-4">
@@ -64,10 +72,10 @@ export default function Hero() {
                         placeholder={Lookup.INPUT_PLACEHOLDER}
                         onChange={(event) => setUserInput(event.target.value)}
                         value={userInput}
-                        onKeyDown={handleKeyDown} 
+                        onKeyDown={handleKeyDown}
                         className="outline-none bg-transparent w-full h-32 max-h-56 resize-none text-white"
                     />
-                    {userInput?.length>0 && (
+                    {userInput?.length > 0 && (
                         <ArrowRight
                             onClick={() => onGenerate(userInput)}
                             className="bg-blue-500 p-2 h-10 w-10 rounded-md cursor-pointer text-white"
@@ -83,14 +91,14 @@ export default function Hero() {
                 {Lookup?.SUGGESTIONS.map((suggestion: string, index: number) => (
                     <h2
                         key={index}
-                        onClick={() => onGenerate(suggestion)}
+                        onClick={() => handleSuggestionClick(suggestion)}
                         className="p-1 px-2 border rounded-full text-sm text-gray-400 hover:text-white cursor-pointer transition-colors duration-150"
                     >
                         {suggestion}
-                    </h2> 
+                    </h2>
                 ))}
             </div>
-            <SignInDialog openDialog={openDialog} closeDialog={setOpenDialog} />
+            <SignInDialog openDialog={openDialog} closeDialog={(v: boolean) => setOpenDialog(v)} />
         </div>
     )
 }

@@ -28,8 +28,8 @@ export function Provider({ children }: ProviderProps) {
     const convex = useConvex()
 
 
-    const isAuthenticated = async () => {
-        if (typeof window !== 'undefined') {
+    useEffect(() => {
+        const isAuthenticated = async () => {
             const storedUser = localStorage.getItem("user")
             if (!storedUser) {
                 setInitialCheckDone(true)
@@ -38,6 +38,7 @@ export function Provider({ children }: ProviderProps) {
                 }
                 return
             }
+
             try {
                 const user = JSON.parse(storedUser)
                 const result = await convex.query(api.users.GetUser, {
@@ -50,10 +51,10 @@ export function Provider({ children }: ProviderProps) {
                 setInitialCheckDone(true)
             }
         }
-    }
 
-    useEffect(() => {
-        isAuthenticated()
+        if (typeof window !== "undefined") {
+            isAuthenticated()
+        }
     }, [pathname, router])
 
     return (
