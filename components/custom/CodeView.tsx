@@ -68,7 +68,7 @@ export default function CodeView() {
             const prompt = JSON.stringify(messages) + " " + Prompt.CODE_GEN_PROMPT
             const result = await axios.post("/api/gen-ai-code", { prompt })
             const aiResp = result.data
-            const mergedFiles = { ...Lookup.DEFAULT_FILE, ...aiResp?.files }
+            const mergedFiles = { ...aiResp?.files, ...Lookup.DEFAULT_FILE }
             setFiles(mergedFiles)
 
             await UpdateFiles({

@@ -1,21 +1,34 @@
 "use client"
 
-import { useContext, useEffect, useRef } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { SandpackPreview } from "@codesandbox/sandpack-react"
 import { ActionContext } from "@/context/ActionContext"
 
 export default function SandpackPreviewClient() {
-    const previewRef = useRef<any>(null)
     const { action } = useContext(ActionContext)
+    const previewRef = useRef<any>(null)
+    const [client, setClient] = useState<any>(null)
+
+    useEffect(() => {
+        const fetchClient = async () => {
+            if (previewRef.current && typeof previewRef.current.getClient === "function") {
+                try {
+                    const result = await previewRef.current.getClient()
+                    setClient(result)
+                } catch (err) {
+                    console.error("Error getting Sandpack client:", err)
+                }
+            }
+        }
+
+        fetchClient()
+    }, [])
 
     useEffect(() => {
         const run = async () => {
-            if (!previewRef.current || !action?.actionType) return
+            if (!client || !action?.actionType) return
 
             try {
-                const client = await previewRef.current?.getClient?.()
-                if (!client) return
-
                 const result = await client.getCodeSandboxURL?.()
                 if (!result?.sandboxId) return
 
@@ -30,13 +43,14 @@ export default function SandpackPreviewClient() {
         }
 
         run()
-    }, [action?.actionType])
+    }, [action?.actionType, client])
 
     return (
         <SandpackPreview
             ref={previewRef}
             style={{ height: "80vh" }}
             showNavigator
+            showRefreshButton
         />
     )
 }
